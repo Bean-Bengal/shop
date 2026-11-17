@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Loaded only the drawings the stall really sells (296, 290), pointed the hero at 296 instead of a drawing I don't have, and padded the page so the check banners don't cover the cards.
+Added a "Pet portraits and pigeon pieces" offer section with one sentence and a price line to the home and shop pages, plus a load-time check that it appears.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
