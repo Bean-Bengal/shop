@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Added a "Pet portraits and pigeon pieces" offer section with one sentence and a price line to the home and shop pages, plus a load-time check that it appears.
+Added the stall drawings' numbers to the kit's drawing list so the cards show pictures, and made the check strip sit at the page end on phones instead of covering cards.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
