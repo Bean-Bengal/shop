@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Added the stall drawings' numbers to the kit's drawing list so the cards show pictures, and made the check strip sit at the page end on phones instead of covering cards.
+Replaced the phone price check with one that tests picture, name, price, line are stacked in order with even gaps, plus a broken twin that must fail.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
