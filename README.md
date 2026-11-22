@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Replaced the phone price check with one that tests picture, name, price, line are stacked in order with even gaps, plus a broken twin that must fail.
+Check strip now sits at the page end instead of covering cards; phone card check finds cards more loosely; the grid toy is tested in the 360px frame on any page.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
