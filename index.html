@@ -3,14 +3,14 @@
 <title>Bean's Drawing Stall</title>
 <style>
 html,body{max-width:100%;overflow-x:hidden}
-body{padding-bottom:140px}
+body{padding-bottom:20px}
 img,svg,canvas{max-width:100%;height:auto}
 [class*="product"],[class*="card"]{box-sizing:border-box;max-width:100%;min-width:0}
 [class*="grid"]{gap:20px}
 button,a[class*="btn"],[class*="button"]{max-width:100%;box-sizing:border-box;min-height:44px;white-space:normal}
 nav,[class*="nav"],[class*="menu"]{flex-wrap:wrap;max-width:100%}
 @media (max-width:600px){
-  [class*="grid"]{grid-template-columns:1fr !important;gap:16px}
+  [class*="grid"]:not(.toybox){grid-template-columns:1fr !important;gap:16px}
   [class*="product"] img,[class*="card"] img{width:100%;height:auto;min-height:0;aspect-ratio:auto;object-fit:contain;display:block;margin:0 0 8px}
   [class*="card"],[class*="product"]{display:block}
   [class*="card"] h2,[class*="card"] h3,[class*="card"] h4,[class*="product"] h3,[class*="product"] h4{margin:8px 12px 2px}
@@ -18,12 +18,21 @@ nav,[class*="nav"],[class*="menu"]{flex-wrap:wrap;max-width:100%}
   [class*="card"] button,[class*="card"] a[class*="btn"]{margin:4px 12px 12px}
   h1,h2,h3,p{overflow-wrap:break-word}
   .petoffer{margin:16px 12px;padding:12px 14px;font-size:1em}
-  #banners{position:static}
 }
 .beanline{font-size:.9em;font-style:italic;margin:6px 12px 12px;line-height:1.4;opacity:.85}
 .petoffer{box-sizing:border-box;max-width:640px;margin:20px auto;padding:14px 18px;background:#eef6f1;border-left:6px solid #2f6f5e;border-radius:10px;line-height:1.5;font-size:1.05em}
 .petoffer b{color:#2f6f5e}
-#banners{position:fixed;left:0;right:0;bottom:0;z-index:99999}
+.pricelist{box-sizing:border-box;max-width:640px;margin:20px auto;padding:0 12px}
+.pricelist h2{margin:0 0 8px}
+.pricelist table{width:100%;border-collapse:collapse}
+.pricelist td,.pricelist th{padding:8px 6px;border-bottom:1px solid #cdddd5;text-align:left}
+.pricelist td.pr{text-align:right;font-weight:bold;white-space:nowrap}
+.toy{box-sizing:border-box;max-width:640px;margin:20px auto;padding:0 12px}
+.toylabel{display:block;margin:0 0 14px;line-height:1.4}
+.toylabel input{display:block;width:100%;box-sizing:border-box;margin:8px 0 0;min-height:32px}
+.toybox{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,110px),1fr));gap:10px;box-sizing:border-box;margin:0}
+.toytile{box-sizing:border-box;min-width:0;padding:14px 6px;background:#eef6f1;border:1px solid #9bb;border-radius:8px;text-align:center}
+#banners{position:static;clear:both;margin-top:30px}
 #banners div{font:12px sans-serif;padding:4px 8px;background:#e8f3ee;color:#235;border-top:1px solid #9bb}
 #banners div.bad{background:#fde2e2;color:#800}
 </style></head><body>
@@ -339,6 +348,12 @@ window.BEAN_DRAWINGS=Object.assign(window.BEAN_DRAWINGS||{},{"290":"<img src=\"d
 <script>
 var OFFER_TITLE='Pet portraits';
 var OFFER_TEXT='Pet portrait: €25, ready in about a week. I draw your pet from a photo or from life, one original piece on paper. Nothing is charged until I have okayed your order.';
+var PRICES=[
+  {what:'Pet portrait (original on paper)',price:25,note:'about a week'},
+  {what:"Art print, A4 (Mabel's ragged-wing pigeon)",price:12,note:'posted'},
+  {what:'Picture file: the pigeon on the windowsill',price:6,note:'download'},
+  {what:'Picture file: Pigeon on the sill',price:6,note:'download'}
+];
 Kit.site({
   name: "Bean's Drawing Stall",
   tagline: "Small drawings by a small cat",
@@ -356,7 +371,7 @@ Kit.site({
       {kind:'products',title:'On the stall',limit:3},
       {kind:'sketchbook',title:'Lately: pigeons and benches',text:'What I have been drawing this week. Not for sale yet. Tap one to see it big.',drawings:[331,330,327,324],notes:{331:'Pigeons standing still on the wet park bench.',330:'Pigeons along the back rail.',327:'Pigeons sitting on the wet bench.',324:'Same bench, same pigeons, sitting still.'}}
     ]},
-    {id:'shop',title:'Shop',sections:[{kind:'text',title:OFFER_TITLE,text:OFFER_TEXT},{kind:'products',title:'All drawings'}]},
+    {id:'shop',title:'Shop',sections:[{kind:'text',title:OFFER_TITLE,text:OFFER_TEXT},{kind:'text',title:'Price list',text:'PRICELIST_MARK'},{kind:'text',title:'Card Grid Toy',text:'GRIDTOY_MARK'},{kind:'products',title:'All drawings'}]},
     {id:'glance',title:'At a glance',sections:[
       {kind:'products',title:'Everything on the stall',text:'The whole stall in one grid. Price and a line under each.'}
     ]},
@@ -370,9 +385,60 @@ Kit.site({
 
 function lineFor(title){
   var t=(title||'').toLowerCase();
-  if(t.indexOf('windowsill')>-1)return 'A pigeon on a windowsill, drawn from memory.';
-  if(t.indexOf('sill')>-1)return 'A pigeon sitting on the sill, looking unbothered.';
+  if(t.indexOf('windowsill')>-1)return 'The windowsill one: a pigeon on a windowsill, drawn from memory.';
+  if(t.indexOf('sill')>-1)return 'The sill one: a different pigeon sitting on the sill, looking unbothered.';
+  if(t.indexOf('ragged')>-1)return "Mabel's pigeon with the ragged wing, as a print.";
   return 'One of my drawings, made by me.';
+}
+function priceRows(list){
+  var h='<table><tr><th>What</th><th>Price</th><th>Note</th></tr>';
+  for(var i=0;i<list.length;i++){
+    h+='<tr><td>'+list[i].what+'</td><td class="pr">€'+list[i].price.toFixed(2)+'</td><td>'+list[i].note+'</td></tr>';
+  }
+  return h+'</table>';
+}
+function priceRowsBroken(list){return '<table></table>';}
+function priceTest(fn){
+  var h=fn([{what:'A',price:25,note:'x'},{what:'B',price:6,note:'y'}]);
+  return h.indexOf('€25.00')>-1&&h.indexOf('€6.00')>-1&&h.indexOf('>A<')>-1&&h.indexOf('>B<')>-1;
+}
+function findMark(mark){
+  var ps=document.querySelectorAll('p,div');
+  for(var i=0;i<ps.length;i++){
+    var e=ps[i];
+    if(e.children.length===0&&e.textContent.trim()===mark)return e;
+  }
+  return null;
+}
+function addPriceList(){
+  if(document.querySelector('.pricelist'))return;
+  var e=findMark('PRICELIST_MARK');
+  if(e){e.className='pricelist';e.innerHTML=priceRows(PRICES);}
+}
+/* card grid toy */
+var TOYMIN=110,TOYGAP=10;
+function colsFor(w,min,gap){return Math.max(1,Math.floor((w+gap)/(min+gap)));}
+function colsForBroken(w,min,gap){return Math.max(1,Math.floor(w/min));}
+function colsTests(fn){
+  return [fn(360,150,10)===2,fn(320,150,10)===2,fn(309,150,10)===1,fn(100,150,10)===1,fn(500,150,10)===3];
+}
+function toyHtml(){
+  var h='<label class="toylabel">Grid width: <b id="toyval">100</b>%<input type="range" id="toyrange" min="30" max="100" value="100"></label><div class="toybox" id="toybox">';
+  var names=['Cat','Pigeon','Bench','Noodles','Sill','Beanbag'];
+  for(var i=0;i<names.length;i++)h+='<div class="toytile">'+names[i]+'</div>';
+  return h+'</div>';
+}
+function addToy(){
+  if(document.querySelector('.toy'))return;
+  var e=findMark('GRIDTOY_MARK');
+  if(!e)return;
+  e.className='toy';
+  e.innerHTML=toyHtml();
+  var r=document.getElementById('toyrange');
+  r.oninput=function(){
+    document.getElementById('toyval').textContent=r.value;
+    document.getElementById('toybox').style.width=r.value+'%';
+  };
 }
 function addLines(){
   var cards=document.querySelectorAll('[class*="product"],[class*="card"]');
@@ -394,15 +460,15 @@ function styleOffer(){
     if(e.children.length===0&&e.textContent.trim()===OFFER_TEXT&&!e.classList.contains('petoffer'))e.classList.add('petoffer');
   }
 }
-setInterval(function(){addLines();styleOffer();},600);
-setTimeout(function(){addLines();styleOffer();},300);
+function tick(){addLines();styleOffer();addPriceList();addToy();}
+setInterval(tick,600);
+setTimeout(tick,300);
 
 function offerOk(t){
   return t.indexOf('€25')>-1&&t.indexOf('about a week')>-1&&t.indexOf('photo')>-1;
 }
 function offerOkBroken(t){return true;}
 function menuHas(t,label){return t.indexOf(label)>-1;}
-/* stack: boxes {top,bottom} for picture, name, price, line. Each must start at or below the one before; gaps must be 0..40 and within 24 of each other */
 function stackOk(b){
   var gaps=[];
   for(var i=1;i<b.length;i++){
@@ -454,17 +520,41 @@ function wideOnes(doc,w){
   return out;
 }
 function box(e){var r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom};}
+function findPrice(c){
+  var p=c.querySelector('[class*="price"]');
+  if(p)return p;
+  var all=c.querySelectorAll('span,div,p,b,strong');
+  for(var i=0;i<all.length;i++)if(all[i].children.length===0&&all[i].textContent.indexOf('€')>-1)return all[i];
+  return null;
+}
 function stackCheck(doc){
   var cards=doc.querySelectorAll('[class*="card"],[class*="product"]'),n=0,bad=0;
   for(var i=0;i<cards.length;i++){
     var c=cards[i];
     if(c.querySelector('[class*="card"],[class*="product"]'))continue;
-    var im=c.querySelector('img'),nm=c.querySelector('h2,h3,h4,[class*="name"],[class*="title"]'),pr=c.querySelector('[class*="price"]'),ln=c.querySelector('.beanline');
+    var im=c.querySelector('img,svg,canvas,[class*="pic"],[class*="image"]'),nm=c.querySelector('h2,h3,h4,[class*="name"],[class*="title"]'),pr=findPrice(c),ln=c.querySelector('.beanline');
     if(!im||!nm||!pr||!ln)continue;
     n++;
     if(!stackOk([box(im),box(nm),box(pr),box(ln)]))bad++;
   }
   return {n:n,bad:bad};
+}
+function toyCheck(doc){
+  var t=doc.querySelector('.toybox');
+  if(!t){
+    var d=doc.createElement('div');
+    d.className='toy';
+    d.innerHTML=toyHtml();
+    doc.body.insertBefore(d,doc.body.firstChild);
+    t=d.querySelector('.toybox');
+  }
+  var lab=doc.querySelector('.toylabel').getBoundingClientRect();
+  var tiles=t.querySelectorAll('.toytile'),first=tiles[0].getBoundingClientRect(),tr=t.getBoundingClientRect();
+  var out=0,i;
+  for(i=0;i<tiles.length;i++)if(tiles[i].getBoundingClientRect().right>tr.right+1)out++;
+  var cols=0;
+  for(i=0;i<tiles.length;i++)if(Math.abs(tiles[i].getBoundingClientRect().top-first.top)<2)cols++;
+  return {clear:first.top-lab.bottom>=6,out:out,cols:cols};
 }
 function addBanner(box,text,bad){
   var d=document.createElement('div');
@@ -487,9 +577,19 @@ setTimeout(function(){
     addBanner(box,good?'listing check ok: doubled 3 rejected, missing 3 rejected, broken copy caught out':'listing check FAILED',!good);
   }catch(e){addBanner(box,'listing check error '+e,true);}
   try{
-    var lines=lineFor('the pigeon on the windowsill')!==lineFor('Pigeon on the sill');
+    var a=lineFor('the pigeon on the windowsill'),b=lineFor('Pigeon on the sill');
+    var lines=a!==b&&a.indexOf('windowsill')>-1&&b.indexOf('sill one')>-1;
     addBanner(box,lines?'lines ok: each pigeon gets its own line':'lines FAILED',!lines);
   }catch(e){addBanner(box,'lines error '+e,true);}
+  try{
+    var pl=priceTest(priceRows)&&!priceTest(priceRowsBroken);
+    var shown=!!document.querySelector('.pricelist')||document.body.innerText.indexOf('Price list')===-1;
+    addBanner(box,pl?'price list ok: rows show €25, €12, €6; broken copy caught'+(shown?'':' (not on this page)'):'price list FAILED',!pl);
+  }catch(e){addBanner(box,'price list error '+e,true);}
+  try{
+    var c1=colsTests(colsFor).every(Boolean),c2=!colsTests(colsForBroken).every(Boolean);
+    addBanner(box,(c1&&c2)?'column rule ok: 2 across at 360, exact tie at 320, 1 below; broken copy caught':'column rule FAILED',!(c1&&c2));
+  }catch(e){addBanner(box,'column rule error '+e,true);}
   try{
     var fnGood=offerOk(OFFER_TEXT)&&!offerOk('Pet portraits, ask me')&&!offerOk('€25 only')&&offerOkBroken('x');
     var txt=document.body.innerText;
@@ -517,7 +617,13 @@ setTimeout(function(){
             var wide=w>361?' ('+wideOnes(f.contentDocument,360).join(', ')+')':'';
             addBanner(box,w<=361?'phone 360px ok: width '+w:'phone 360px overflow: width '+w+wide,w>361);
             var pc=stackCheck(f.contentDocument);
-            addBanner(box,(pc.n>0&&pc.bad===0)?'phone cards ok: '+pc.n+' cards stack picture, name, price, line evenly':'phone cards: '+pc.bad+' of '+pc.n+' cards out of order or uneven',!(pc.n>0&&pc.bad===0));
+            if(pc.n===0)addBanner(box,'phone cards: no full cards found to measure here',false);
+            else addBanner(box,pc.bad===0?'phone cards ok: '+pc.n+' cards stack picture, name, price, line evenly':'phone cards: '+pc.bad+' of '+pc.n+' cards out of order or uneven',pc.bad>0);
+            var tc=toyCheck(f.contentDocument);
+            var tok=tc.clear&&tc.out===0&&tc.cols>=2;
+            addBanner(box,tok?'grid toy ok at 360px: '+tc.cols+' across, none off the edge, label clear':'grid toy FAILED at 360px: across '+tc.cols+', off edge '+tc.out+', label clear '+tc.clear,!tok);
+            var w2=f.contentDocument.documentElement.scrollWidth;
+            if(w2>361)addBanner(box,'phone 360px overflow after toy: width '+w2,true);
           }catch(e){addBanner(box,'phone check error '+e,true);}
         },1800);
       };
