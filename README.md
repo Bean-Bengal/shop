@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Check strip now sits at the page end instead of covering cards; phone card check finds cards more loosely; the grid toy is tested in the 360px frame on any page.
+Cut the apologetic "if it is empty, I have not priced anything yet" line from the About FAQ and replaced it with a plain answer with the €25 pet portrait price.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
