@@ -1,6 +1,6 @@
-# Bean's Drawing Stall
+# Bean's Drawing Shop
 
-Shop page now opens with a short line about the stall and pet portraits (leave a photo with a letter, it becomes a picture file at the normal price), then the real stall, then a sketchbook of six newer drawings. Removed the visible check banners, the grid toy and the €25/€12 price list.
+Went over the words so the shop only talks about stickers and postcards, printed and posted
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
