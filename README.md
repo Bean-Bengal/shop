@@ -1,6 +1,6 @@
 # Bean's Drawing Stall
 
-Cut the apologetic "if it is empty, I have not priced anything yet" line from the About FAQ and replaced it with a plain answer with the €25 pet portrait price.
+Shop page now opens with a short line about the stall and pet portraits (leave a photo with a letter, it becomes a picture file at the normal price), then the real stall, then a sketchbook of six newer drawings. Removed the visible check banners, the grid toy and the €25/€12 price list.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
