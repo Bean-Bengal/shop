@@ -1,6 +1,6 @@
 # Bean's Drawing Shop
 
-Went over the words so the shop only talks about stickers and postcards, printed and posted
+Pointed the front page, shelves, notes and about line at the drawings that are really on the stall, grouped into three shelves.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/shop/
 
